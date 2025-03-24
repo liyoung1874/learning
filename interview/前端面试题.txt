@@ -1,0 +1,484 @@
+# 前端面试题
+
+## html
+
+1. HTML5 有哪些新特性？
+
+   > [!NOTE]
+   >
+   > 1. 新的语义化标签，如 header、footer、article、section、nav、aside 等。这些标签是页面结构更加清晰，便于搜索引擎优化（SEO）和开发者理解。
+   > 2. 多媒体元素。audio 用于嵌入音频内容，支持原生播放，不依赖插件，video 用于嵌入视频内容，支持多种格式，业无需第三方插件。
+   > 3. canvas 和 svg。canvas 可通过 js 动态绘制 2D 图形，适用于游戏、图表等场景。svg 支持矢量图形，适合高质量的可缩放图形。
+   > 4. 表单增强。新增输入类型，如 input 的 type = email，url，date，number 等，提升用户体验和表单验证。新增属性，如 placeholder，required，pattern 等，减少 js 的使用。
+   > 5. 本地存储。localStorage 用于持久化存储键值对数据，无过期时间。sessionStorage 会话级存储，页面关闭后数据清除。这两者替代了传统的 Cookie, 容量更大，通常为 5 - 10 MB。
+   > 6. 地理位置 api，通过 navigator.geoloaction，可以获取用户的地理位置，用于地图和位置相关服务。
+   > 7. Web workers，允许在后台线程运行 js，处理复杂计算而不阻塞主线程，提升性能。
+   > 8. 拖放 api，通过 draggable 属性和相关事件，如 dragstart、drop 等，实现原生的拖放功能。
+   > 9. websocket，提供双向通信协议，支持数据实时传输，适用于聊天，实时游戏等场景。
+   > 10. history api，通过 pushState 和 replaceState，可以在不刷新页面的情况下操作浏览器历史记录，方便开发单页面应用。
+   > 11. CSS3 支持，虽然 css3 不是 html5 的一部分，但是 html5 的发展与 css3（如动画、过度、flexbox）的紧密结合，共同提升了前端体验。
+   >
+   > 总的说来，html5 的新特性主要围绕语义化，多媒体，本地化，性能优化和实施通信展开。它减少了对 flash 等插件的依赖，推送了现代 web 应用的普及，比如单页面应用和移动端优化。
+
+   
+
+2. 什么是语义化 HTML？有哪些好处？
+
+   > [!NOTE]
+   >
+   > 语义化 html 是指通过使用具有明确语义的 html 标签来描述内容的含义和结构，而不是仅仅关注页面的外观。例如使用 header 表示页眉，nav 表示导航，article 表示文章内容，使得代码不仅是为了浏览器渲染，也是为了表达内容的逻辑和目的，而不是一味的使用 div 和 span 来布局。
+   >
+   > 语义化的好处
+   >
+   > 1. 提升了代码的可读性和可维护性，让代码结构一目了然，开发者能够快速理解页面各部分的作用。
+   > 2. 搜索引擎优化，搜索引擎更喜欢语义化的结构，因为它能更好的解释页面内容，例如 h1 表示主标题，article 表示文章内容，这些信息有助于爬虫抓取和排名。相比之下，滥用 div 会让搜索引擎难以判断页面的重点。
+   > 3. 增强可访问性。屏幕阅读器等辅助技术依赖语义化标签来为视障用户提供更好的体验。例如 nav 会被识别为导航区域，button 明确为可交互元素。
+   > 4. 跨设备和浏览器兼容性。语义化标签通常有自己的默认浏览器样式和行为，能更好的适配不同设备，减少 css 的冗余调整。
+   > 5. 减少对 css 和 js 的依赖。语义化标签自带一定的结构化特性，比如 header 和 footer 的布局含义清晰，可以较少复杂的类命名或额外的 js 逻辑。
+   >
+   > 语义化在大型项目中尤为重要，在大型电商项目中，假设有一个 product 标签，那就能清除的区分这是商品区域。总之，语义化 html 是前端开发中的最佳实践，不仅为了代码美观，更是为了用户、搜索引擎和团队协作的长远利益。
+
+   
+
+3. `<!DOCTYPE>` 的作用是什么？
+
+   > [!NOTE]
+   >
+   > <!DOCTYPE> 是 HTML 文档开头的声明（Document Type Declaration），用于告诉浏览器当前文档使用的 HTML 或 XHTML 规范版本。它的主要作用是定义文档的解析模式，确保浏览器按照正确的标准渲染页面。
+   > 具体作用
+   > 指定文档类型和渲染模式
+   > 浏览器的渲染引擎有多种模式：
+   > 标准模式（Standards Mode）：按照 W3C 标准解析 HTML 和 CSS。
+   > 怪异模式（Quirks Mode）：模拟旧浏览器（如 IE5）的非标准行为，向后兼容。
+   > 近似标准模式（Almost Standards Mode）：介于两者之间。
+   > 如果省略 <!DOCTYPE> 或声明不正确，浏览器会进入怪异模式，导致页面布局和样式可能出现异常。
+   > 触发标准模式
+   > 现代网页开发中，通常使用 <!DOCTYPE html>（HTML5 的声明），它简洁且明确地告诉浏览器按照最新的 HTML5 标准解析文档。这样浏览器会以标准模式渲染，确保 CSS 和 JavaScript 行为符合预期。
+   > 历史背景与兼容性
+   > 在 HTML4 和 XHTML 中，<!DOCTYPE> 声明更复杂，指向特定的 DTD（文档类型定义）文件，例如：
+   > <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+   > HTML5 简化了这一过程，只需 <!DOCTYPE html>，不再依赖 DTD，兼容性更强。
+   > 为什么重要？（面试加分点）
+   > 1. 避免怪异模式的问题
+   > 在怪异模式下，盒模型（如 IE 的旧盒模型）、行高、字体大小等计算方式可能与标准模式不同，导致跨浏览器兼容性问题。
+   > 例如，CSS 的 box-sizing 行为在怪异模式下可能不可控。
+   > 前端开发规范
+   > <!DOCTYPE> 是现代 Web 开发的标配，确保代码符合 W3C 标准，提升代码质量。
+   > 调试便利性
+   > 如果页面布局出现问题，检查是否正确声明 <!DOCTYPE> 是排查的第一步。
+   > 注意事项
+   > <!DOCTYPE> 必须放在 HTML 文件的第一行（注释除外），否则无效。
+   > 它对大小写不敏感，例如 <!doctype html> 也有效。
+   > 它不是 HTML 标签，而是独立的声明。
+   > <!DOCTYPE> 的核心作用是告诉浏览器以何种标准解析文档，直接影响页面的渲染效果和兼容性。
+
+4. meta 标签有哪些常用属性？
+
+   > [!NOTE]
+   >
+   > meta 标签是 HTML 中用于提供页面元数据的元素，通常放在 head 区域。它不直接显示在页面上，但对浏览器、搜索引擎和用户体验有重要影响。以下是前端面试中常见的 meta 标签属性及其作用：
+   >
+   > 1. charset 属性，用于指定文档的字符编码。常用值为 UTF-8，
+   >
+   >    <meta charset="UTF-8">
+   >
+   >    用途：确保浏览器正确解析文本，避免乱码。UTF-8 是现代 Web 开发的默认编码，支持多语言字符。
+   >
+   > 2. name 和 contetn 属性结合，用于定义文档的元数据，提供额外信息。常见用法 name=“viewport”，用于控制移动端视口行为，适配响应式设计。常用值为 width=device-width，initial-scale=1.0 。
+   >
+   >    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   >
+   >    其中 width=device-width 用于使页面宽度等于设备宽度，initial-scale=1.0 设置初始缩放比例为 1，这样确保在移动设备上正常显示，避免缩放问题。
+   >
+   >    name = “description” content=“这是一个什么什么页面”。用于搜索引擎显示在搜索结果摘要中，提升 SEO。
+   >
+   >    name=“keywords” content=“很多关键词 ... ”。用于指定页面关键词，提升 SEO 。
+   >
+   >    name=“author” content=“作者名字 ...“ 标记页面作者，记录开发者信息。
+   >
+   >    name=”robots“，用于控制搜索引擎的爬虫行为，常用值 index，follow，noindex（禁止页面被索引），nofollow（禁止爬虫跟踪页面链接）
+   >
+   > 3. http-equiv 和 content 属性结合，用于模拟 HTTP 响应头，控制浏览器的行为。常见的用法 `<meta http-equiv="refresh" content="5; url=targte_url">`，5 秒后跳转到指定的 URL。
+   >
+   >    `<meta http-equiv="X-UA-Compatible" content="IE=edge">` ，指定 ie 浏览器的渲染模式，强制 IE 使用最新引擎渲染，避免兼容模式。
+   >
+   > 4. property 属性，用于为社交媒体分享优化页面数据，提升页面在社交平台上的展示效果。
+   >
+   >    `<meta property="og:title" content="展示的标题">`
+   >
+   >    `<meta property="og:description" content="展示的描述">`
+   >
+   >    `<meta property="og:image" content="展示的图片">`
+   >
+   > 提到 viewport 在移动端开发的重要性，或 og: 属性在社交营销中的作用。强调 meta 标签必须放在 head 中，且内容应简洁有效。可以说说 CSP 相关的 meta 用法。
+
+5. HTML 中的 data- 属性有什么用？
+
+   > [!NOTE]
+   >
+   > 是 HTML5 引入的一种自定义属性（Custom Data Attributes），用于在 HTML 元素中存储私有或自定义的数据。这些数据不会影响元素的默认行为或样式，而是提供了一种标准化的方式，让开发者可以在标签中嵌入额外信息，并通过 JavaScript 或 CSS 访问和操作。核心作用是为 HTML 元素提供自定义数据的存储和访问方式，极大地方便了前端开发中的动态交互和逻辑处理。
+   >
+   > 允许开发者将任意键值对数据附加到 HTML 元素上，键名以 data- 开头，后接自定义名称。然后通过 JS 的 dataset 属性，可以获取和修改 data- 属性的值。其中在获取的时候，dataset 会将连字符转换为驼峰命名。
+   >
+   > 常用于动态交互逻辑，比如标记元素状态以及用作事件委托时的识别目标，存储配置信息或传递数据给脚本。也可以配合 CSS 的属性选择器来为元素设置样式。
+   >
+   > data- 是 W3C 的标准，合法且不会与未来的 HTML 冲突。其键值对完全由开发者定义，使用范围广，没有任何的副作用，不会影响 HTML 的语义和浏览器的默认行为。命名规范时小写字母、数字和连字符，避免特殊字符。虽然自定义数据很方便，但是不建议存储大量数据。还要避免存储敏感信息，因为它在 dom 中是可见的。
+
+6. defer 和 async 在 <script> 中的区别是什么？
+
+   > [!NOTE]
+   >
+   > script 标签的 defer 和 async 是两个用于优化外部脚本加载和执行的属性。它们解决了传统 script 标签阻塞 HTML 解析的问题，但在加载和执行时机上有显著区别。
+   >
+   > 默认情况下，浏览器在遇到 script 标签时会暂停 HTML 解析，下载脚本并立即执行，执行完毕后再继续解析 HTML。这时候，如果脚本文件较大或网络较慢，会阻塞页面渲染。
+   >
+   > 如果 script 携带了 defer 或者 async，都允许浏览器在下载脚本的同时继续解析 HTML，避免阻塞。但它们在脚本的 **执行时机** 和 **适用场景** 上不同。
+   >
+   > defer 是延迟执行，脚本会在 HTML 文档解析完成（即 DOM 构建完成，触发 DOMContentLoaded 事件前）后按照脚本在页面中的顺序执行。它能保证脚本的执行顺序与它们在 HTML 中的书写顺序一致。适用于需要依赖 DOM 元素或多个脚本之间有依赖关系的场景。
+   >
+   > async 是异步执行，脚本会在下载完成后立即执行，不等待 HTML 解析完成。它不保证脚本的执行顺序，哪个脚本先下载完成就先执行。适用于独立脚本（如统计分析工具、广告脚本），无需依赖 DOM 或其他脚本。
+   >
+   > 其次它们只适用于外部脚本，对于内联脚本无效。
+   >
+   > 如果同时指定了 defer 和 async，则是 async 优先。
+   >
+   > 表示了 type=“module” 的外部脚本默认带有 defer。但是可以通过设置 async 覆盖为异步执行。
+   >
+   > 它们是前端性能优化的重要手段，能较少页面白屏的时间。
+
+   > [!IMPORTANT]
+   >
+   > #### **底部脚本的优点**
+   >
+   > 1. **简单直观**：无需额外属性，易于理解和实现。
+   > 2. **兼容性强**：适用于所有浏览器，无需担心 defer/async 支持。
+   > 3. **保证 DOM 可用**：天然适合 DOM 操作脚本。
+   >
+   > #### **底部脚本的缺点**
+   >
+   > 1. **串行加载**：多个脚本按顺序下载和执行，无法并行，效率低于 defer。
+   > 2. **延迟执行**：脚本加载晚于页面内容，可能影响动态功能的初始化（如延迟加载交互逻辑）。
+   >
+   > #### **defer 和 async 的优势**
+   >
+   > - defer：并行下载 + 顺序执行，适合多脚本依赖场景。
+   > - async：最快执行，适合独立脚本。
+   > - **缺点**：需要浏览器支持（老版本 IE 可能不完全兼容）。
+
+7. src 和 href 有什么区别？
+
+   > [!NOTE]
+   >
+   > src 和 href 都是用于引用外部资源的属性，但它们的用途、适用标签以及行为有明显的区别。
+   >
+   > src 是 source 的简写，表示“资源来源”，用于指定嵌入到页面中的外部资源文件（如脚本、图片、视频等）。这些资源通常会被浏览器加载并替换或嵌入到当前元素的位置。嵌入的资源会被浏览器下载并处理，可能阻塞渲染。如 script img video audio iframe source
+   >
+   > href 是 Hypertext Reference 的简写，表示“超文本引用”，用于指定链接目标的地址，通常用于导航或关联外部资源（如网页、样式表等）。它不直接嵌入资源，而是建立一种引用关系，在用户交互（如点击）或浏览器处理时才会触发。如 a link
+   >
+   > 两者都支持相对路径、绝对路径或 URL。
+   >
+   > script 通过 src 加载并嵌入 JavaScript，适合功能逻辑，直接影响页面行为。
+   >
+   > link 通过 href 引用 CSS，适合样式控制，建立关联而不嵌入内容。
+   >
+   > **性能角度**：src 默认阻塞（可用 defer/async 优化），href 在 <link> 中异步加载。
+
+8. 什么是 HTML 的 contenteditable 属性？
+
+   > [!NOTE]
+   >
+   > 是 HTML5 引入的一个全局属性（Global Attribute），用于指定一个元素是否可以被用户编辑。当该属性被添加到元素上时，用户可以直接在页面上修改该元素的内容（如文本、图片等），类似于文本编辑器中的行为。它为前端开发提供了一种简单的方式来实现可编辑区域，无需复杂的 JavaScript 或第三方库。
+   >
+   > 属性值可以取 true、false、空值，空值等同于 true 表示元素内容可以编辑。如果父元素设置了为 true，则子元素默认继承为可编辑，除非子元素显式设置为 false。
+   >
+   > 允许用户在浏览器中直接编辑内容，无需额外的表单控件。通过 JavaScript 获取或设置编辑后的内容（如 innerHTML 或 textContent）。编辑后的内容仅存在于当前页面，刷新后丢失。
+   >
+   > 使用场景有简易的在线编辑器，交互式表单等。需处理兼容性、安全性、性能和持久化问题。
+
+9. 如何实现图片懒加载？
+
+   > [!NOTE]
+   >
+   > 图片懒加载（Lazy Loading）是一种前端优化技术，用于延迟加载页面中的图片，只有当图片进入或即将进入用户视口（可视区域）时才加载。这种方法可以减少初始页面加载时的资源请求，提升加载速度，节省带宽，尤其对图片较多或长页面非常有效。
+   >
+   > 原理是初始时不加载图片的真实地址（src），而是用占位符或空值替代。监听页面滚动或元素位置，当图片进入视口时动态设置 src，触发加载。
+   >
+   > 实现方式一般有三种：
+   >
+   > 1. 使用 js 手动实现。
+   >
+   >    ```html
+   >    <html>
+   >      <head>
+   >        
+   >      </head>
+   >      <body>
+   >        <img data-src="./img01" alt="img01" >
+   >        <img data-src="./img02" alt="img02" >
+   >        
+   >        <script>
+   >        // 获取图片 dom
+   >        const lazyImages = document.querySelectorAll("img[data-src]");
+   >          
+   >        // 判断图片是否在视口中
+   >        function isInViewPort(ele) {
+   >          const rect = ele.getBoundingClientRect();
+   >          return (rect.top >= 0 && rect.top <= (window.innerHeight || document.documentElement.clientHeight))
+   >        }
+   >        // 加载图片
+   >        function loadImage(img) {
+   >          if(img.dataset.src){
+   >            img.src = img.dataset.src; // 设置真实地址
+   >            img.removeAttribute("data-src"); // 加载后移除属性，避免重复处理。
+   >          }
+   >        }
+   >          
+   >        // 检查并加载可见图片
+   >        function checkImages() {
+   >          lazyImages.forEach(img => {
+   >            if(isInViewPort(img)){
+   >              loadImage(img);
+   >            }
+   >          }
+   >        }
+   >                             
+   >        // 监听滚动和初次加载
+   >        window.addEventListener("scroll", checkImages);
+   >        window.addEventListener("resize", checkImages);
+   >        // 页面加载时检查
+   >        checkImages();
+   >        </script>
+   >      </body>
+   >    </html>
+   >    ```
+   >
+   >    使用节流优化
+   >
+   >    ```js
+   >    function throttle(fn, delay = 150) {
+   >      let timer;
+   >      return function() {
+   >        if(!timer){
+   >          timer = setTimeout(() => {
+   >            fu();
+   >            timer = null;
+   >          }, delay);
+   >        }
+   >      };
+   >    };
+   >    
+   >    window.addEventListener('scroll', throttle(checkImages, 200));
+   >    ```
+   >
+   > 2. 使用 IntersectionObserver api 监听元素是否进入视口。
+   >
+   >    ```javascript
+   >    const images = document.querySeletorAll('img[data-src]');
+   >    
+   >    const observer = new IntersectionObserver((entries, observer) => {
+   >      entries.forEach(entry => {
+   >        if(entry.isIntersecting){ // 元素进入视口
+   >          const img = entry.target;
+   >          img.src = img.dataset.src;
+   >          img.removeAttribute('data-src');
+   >          observer.unobserve(img); // 加载之后停止观察
+   >        }
+   >      })
+   >    }, { rootMargin: '0px 0px 100px 0px'}); // 提前 100px 加载
+   >    
+   >    images.forEach(img => observer.observe(img));
+   >    
+   >    // 该方法不支持老旧浏览器，如 IE。
+   >    ```
+   >
+   >    
+   >
+   > 3. 使用 HTML 原生的 loading 属性。设置 loading=“lazy”，浏览器自动延迟加载。
+   >
+   >    ```html
+   >    <html>
+   >      <body>
+   >        <img src="imgsrc" loading="lazy" alt="懒加载图片" >
+   >      </body>
+   >    </html>
+   >    ```
+   >
+   >    总结
+   >
+   >    在电商网站的长列表中，使用 IntersectionObserver 实现图片懒加载，提升首屏速度。
+   >
+   >    手动实现需节流避免性能瓶颈，IntersectionObserver 是现代最佳实践。
+   >
+   >    可以用低质量图片（如 base64 小图）作为 src，提升用户体验。
+   >
+   >    确保 alt 属性完善，懒加载不影响搜索引擎抓取。
+   >
+   >    **手动 JS**：灵活但需优化性能。
+   >
+   >    **Intersection Observer**：高效、现代，推荐使用。
+   >
+   >    **HTML loading**：最简单，但控制少。 根据项目需求选择方案（如兼容性要求用 JS，现代应用用 API），并结合占位图和节流技术，全面展示懒加载的实现思路。
+
+10. iframe 的优缺点是什么？
+
+    > [!NOTE]
+    >
+    > iframe 是 HTML 中的一个元素，用于在当前页面中嵌入另一个独立的 HTML 文档。
+    >
+    > 优点
+    >
+    > 1. 独立性强。嵌入的内容运行在独立的上下文中，与主页面互不干扰，包括 DOM、CSS 和 JavaScript。可以加载第三方内容（如广告、地图）而不影响主页面。
+    > 2. 模块化加载。可以将页面拆分为多个独立的部分，按需加载。适合嵌入动态内容，如视频播放器、表单或外部工具。
+    > 3. 并行加载。iframe 的资源加载与主页面并行，不阻塞主页面渲染。提升页面加载性能，尤其适合加载较慢的外部资源。
+    > 4. 安全性。由于沙箱机制（sandbox 属性），可以限制嵌入内容的权限。防止恶意代码影响主页面。<iframe src="untrusted.html" sandbox="allow-scripts"></iframe>
+    > 5. 跨域支持。可以嵌入不同域名下的页面，便于集成外部服务，如支付接口或社交媒体插件。
+    >
+    > 缺点
+    >
+    > 1. 性能开销。每个 iframe 创建一个独立的浏览上下文，增加内存和 CPU 使用。页面中多个 iframe 可能导致性能下降。
+    > 2. SEO 不友好。搜索引擎难以抓取 iframe 内的内容，嵌入的关键内容可能无法被索引，影响页面排名。
+    > 3. 交互的复杂性。主页面与 iframe 之间的通信受限（受同源策略限制），需要使用 postMessage 等方式实现跨文档通信，增加开发难度。
+    > 4. 响应式设计困难。iframe 的宽高通常需要固定设置（如 width 和 height），难以自适应。在移动端可能出现滚动条或布局问题。
+    > 5. 历史记录问题。iframe 内的页面导航会影响浏览器历史记录。用户点击返回键可能只退出 iframe 而非主页面，体验不一致。
+    > 6. 安全风险。未正确配置（如未使用 sandbox）时，恶意 iframe 内容可能攻击主页面。如点击劫持（Clickjacking）。可设置 X-Frame-Options 或 CSP（Content Security Policy）。
+    >
+    > 总结：iframe 适合嵌入隔离内容，但不宜用于核心页面结构。
+
+11. HTML 中的 title 属性有什么作用？
+
+    > [!NOTE]
+    >
+    > title 属性是一个全局属性（Global Attribute），可以应用到几乎所有的 HTML 元素上。它的主要作用是提供关于元素的附加信息，通常以**工具提示（tooltip）**的形式显示，当用户将鼠标悬停在元素上时，浏览器会弹出一个小提示框展示 title 的内容。
+    >
+    > 主要作用
+    >
+    > 1. 提供补充说明。title 属性为元素添加描述性文本，帮助用户理解元素的功能、内容或上下文。
+    > 2. 增强用户体验。通过简短的提示，减少用户对元素用途的疑惑，尤其在图标或缩写内容上。
+    > 3. 提升可访问性。为屏幕阅读器提供额外信息，辅助视障用户理解页面内容。
+    > 4. 不影响页面布局。title 的内容不会直接显示在页面上，仅在交互时出现，不占用空间。
+    >
+    > 使用场景
+    >
+    > 1. 按钮和链接的提示。
+    > 2. 图标或图片的描述。
+    > 3. 表单元素的补充。
+    > 4. 解释专业术语或缩写。
+    >
+    > 注意事项
+    >
+    > 1. 显示时机。title 内容仅在鼠标悬停时显示，触摸设备（如手机）无法触发，移动端体验受限。
+    > 2. 长度限制。过长的 title 可能被浏览器截断，建议简洁明了（一般不超过 60-80 个字符）。
+    > 3. 与 alt 的区别。title 是用户交互时显示的提示，不强制。alt 是图片的替代文本，主要为可访问性和 SEO，强制性更强。
+    > 4. 可访问性问题。并非所有屏幕阅读器可靠读取 title，不要将其作为唯一的信息来源。搭配 aria-label 或 aria-describedby。
+    > 5. 样式不可控。title 提示的外观由浏览器决定，无法通过 CSS 自定义。
+
+12. 如何禁用浏览器的默认表单提交行为？
+
+    > [!NOTE]
+    >
+    > 表单默认提交行为是当用户点击提交按钮（如 <button type="submit">）或按下回车键时，浏览器会将表单数据发送到 action 属性指定的 URL，并刷新页面或跳转。
+    >
+    > 如何阻止
+    >
+    > 1. 使用 event.preventDefault()。在表单的 submit 事件监听器中调用 event.preventDefault()，阻止默认提交行为。灵活性高，可以自定义提交后的逻辑。
+    > 2. 按钮上使用 event.preventDefault()。在提交按钮的 click 事件中阻止默认行为。适用于只针对按钮触发的提交。操作更直接，但无法阻止回车键触发的提交，需额外监听表单的 submit 事件。
+    > 3. 使用 onsubmit 返回 false。在 <form> 标签的 onsubmit 属性中返回 false，阻止默认提交。
+    > 4. 设置按钮 type="button"。将提交按钮的 type 从 submit 改为 button，使其不触发表单提交。然后手动处理点击逻辑。这会失去回车提交的便捷性，需额外处理键盘事件。
+    > 5. 禁用表单提交（Vue/React 示例）。在 vue 中，可以直接在 form 元素上监听 submit 事件，并附带上 prevent 修饰符。@submit.prevent 是 Vue 的语法糖，等价于 event.preventDefault()。
+    >
+    > 使用场景
+    >
+    > 阻止提交，验证输入后再决定是否发送请求，用户名为空时阻止提交并提示。用 fetch 或 axios 发送数据，避免页面刷新。可以保持单页面应用的状态，禁止跳转。
+
+13. link 和 @import 的区别是什么？
+
+    > [!NOTE]
+    >
+    > link 和 @import 都是用于引入外部 CSS 文件的方法，但它们的使用方式、加载机制和适用场景有显著差异。
+    >
+    > 差异
+    >
+    > 1. link 是 HTML 标签，写在 <head> 中，用于引入外部资源（如 CSS）。@import 是 CSS 规则，用于在 CSS 文件或 <style> 标签中引入其他 CSS 文件，且必须在 CSS 文件的开头，或 <style> 内的第一行。
+    > 2. 加载机制。浏览器解析 HTML 时，遇到 <link> 会立即并行下载 CSS 文件，不阻塞 HTML 解析，CSS 下载完成后立即应用到页面。浏览器解析到 @import 时，才发起对目标 CSS 文件的请求，加载是串行的，主 CSS 文件下载并解析后，才开始加载 @import 的文件，可能延迟样式应用，如果嵌套多层 @import，会逐层串行加载。
+    > 3. 性能影响。link 并行加载，减少页面渲染阻塞时间。@import 串行加载，可能增加加载时间。
+    > 4. 适用场景。link 是主流方式，用于页面级 CSS 引入，支持动态加载，可指定 media 属性控制条件加载，用于项目中加载核心样式表。@import 用于 CSS 内部管理模块化样式，可以在 CSS 中动态引入其他样式，便于组织，支持条件引入（如媒体查询），用于将多个 CSS 文件组合为一个逻辑单元。
+    > 5. 动态操作。link 可以通过 JavaScript 动态添加或移除。@import 无法通过 JavaScript 动态修改，只能静态定义在 CSS 中。
+    > 6. 浏览器支持和限制。link 所有浏览器广泛支持，无明显限制。@import 老旧浏览器（如 IE5）对嵌套层数有限制，且必须放在 CSS 开头，否则无效。
+    > 7. SEO 和维护性。link 直接在 HTML 中可见，便于搜索引擎解析，样式引用集中于 <head>，易于管理。@import 隐藏在 CSS 中，不利于抓取，分散在 CSS 文件中，复杂项目中可能难以维护。
+
+14. HTML 中的 alt 属性有什么作用？
+
+15. 什么是 HTML 的 manifest 属性？
+
+16. 如何在 HTML 中嵌入 SVG？
+
+17. HTML 中的 hidden 属性有什么用？
+
+18. 什么是 HTML 的 preload 和 prefetch？
+
+19. HTML 中的 form 标签有哪些新特性？
+
+20. 如何实现一个可访问性（Accessibility）友好的页面？
+
+    ## css
+
+21. CSS 中的盒模型是什么？
+
+22. CSS 中的 display 属性有哪些常用值？
+
+23. 如何实现水平居中？
+
+24. 如何实现垂直居中？
+
+25. CSS 中的 position 属性有哪些值？
+
+26. 什么是 BFC？如何触发？
+
+27. CSS 中的 float 属性有什么作用？
+
+28. CSS 选择器优先级如何计算？
+
+29. 什么是 CSS 的 z-index？
+
+30. 如何实现一个三角形？
+
+31. CSS 中的 overflow 属性有哪些值？
+
+32. 什么是 CSS 动画？如何实现？
+
+33. CSS 中的 transition 属性有什么作用？
+
+34. Flex 布局的核心属性有哪些？
+
+35. Grid 布局与 Flex 的区别是什么？
+
+36. CSS 中的 visibility 和 display: none 的区别？
+
+37. 如何实现一个圆形进度条？
+
+38. CSS 中的 calc() 函数有什么用？
+
+39. 如何使用 CSS 实现多列布局？
+
+40. 什么是 CSS 的伪元素（pseudo-element）？
+
+41. CSS 中的 opacity 和 rgba 的区别？
+
+42. 如何实现一个自适应正方形？
+
+43. CSS 中的 clip-path 有什么作用？
+
+44. 如何清除浮动？
+
+45. CSS 中的 will-change 属性有什么用？
+
+46. 如何实现文字溢出省略号？
+
+47. CSS 中的 box-shadow 如何使用？
+
+48. 什么是 CSS 的 currentColor？
+
+49. 如何实现一个响应式导航栏？
+
+50. CSS 中的 media 查询如何使用？
+
