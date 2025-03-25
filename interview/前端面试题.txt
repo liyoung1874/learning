@@ -274,7 +274,7 @@
    >
    >    ```javascript
    >    const images = document.querySeletorAll('img[data-src]');
-   >    
+   >       
    >    const observer = new IntersectionObserver((entries, observer) => {
    >      entries.forEach(entry => {
    >        if(entry.isIntersecting){ // 元素进入视口
@@ -285,9 +285,9 @@
    >        }
    >      })
    >    }, { rootMargin: '0px 0px 100px 0px'}); // 提前 100px 加载
-   >    
+   >       
    >    images.forEach(img => observer.observe(img));
-   >    
+   >       
    >    // 该方法不支持老旧浏览器，如 IE。
    >    ```
    >
@@ -408,7 +408,125 @@
 
 14. HTML 中的 alt 属性有什么作用？
 
+    > [!NOTE]
+    >
+    > alt 属性是 HTML 中用于 <img> 标签（以及 <area> 标签）的属性，全称是 **"alternative text"（替代文本）**。它的主要作用是为图片提供文本描述，在特定场景下替代图片内容。
+    >
+    > 主要作用
+    >
+    > 1. 提供可访问性（Accessibility)。为屏幕阅读器（如 NVDA、JAWS）提供图片的文本描述，帮助视障用户理解图片内容。
+    > 2. 图片加载失败时的替代显示。当图片因网络问题、路径错误或格式不支持而无法加载时，浏览器会显示 alt 文本。可避免用户面对空白或错误，提升体验。
+    > 3. 搜索引擎优化（SEO）。搜索引擎（如 Google）无法直接解析图片内容，依赖 alt 文本判断图片含义。可提高图片搜索排名和页面曝光率。
+    > 4. 上下文补充。为用户提供图片的背景信息，即使图片可见也能增加理解。
+    >
+    > 使用场景
+    >
+    > 1. 装饰性图片。如果图片仅用于美化，不含实质信息，alt 可设为空值（alt=""）。
+    > 2. 功能性图片。如果图片有交互作用（如按钮图标），alt 应描述其功能。
+    > 3. 内容性图片。如果图片是页面核心内容，alt 应详细描述。
+    >
+    > 与 title 的区别
+    >
+    > alt 是转为 img 标签设计，用于辅助和替代图片内容。用于可访问性，SEO或者加载失败。不以工具提示形式显示。
+    >
+    > title 是全局属性，鼠标悬停时显示。用于补充信息，不强制。
+    >
+    > 其中 HTML 规范要求 img 标签必须要有 alt 属性，即使为空。
+
 15. 什么是 HTML 的 manifest 属性？
+
+    > [!NOTE]
+    >
+    > manifest 属性是 HTML5 中引入的一个属性，通常用于 <html> 标签，它指定了一个 **应用程序缓存清单（Application Cache Manifest）** 文件的地址。这个文件定义了网页在离线状态下可以缓存的资源，从而支持离线访问。然而，需要注意的是，manifest 属性和与之相关的 **HTML5 Application Cache（AppCache）** 已被 W3C 标记为**废弃（deprecated）**，推荐使用更现代的 **Service Workers** 替代。
+    >
+    > 基本作用
+    >
+    > manifest 属性指向一个 .appcache 文件（通常以 .appcache 为扩展名），该文件列出了浏览器应缓存的资源（如 HTML、CSS、JS、图片等），以便在无网络连接时仍能访问页面。用于实现网页的离线功能，常见于早期的移动 Web 应用或需要离线支持的场景。主要为早期的 web 应用在网络不稳定的环境下提供离线访问，用于缓存静态资源，减少带宽使用。
+    >
+    > <html manifest="manifest.appcache">
+    >
+    > 工作原理
+    >
+    > manifest 文件是一个纯文本文件。分为三个主要部分 CACHE（指定需要缓存的资源）、NETWORK（指定始终需要网络访问的资源）、FALLBACK（指定离线时的回退资源）。必须以 CACHE MANIFEST 开头。服务器必须将 .appcache 文件的 MIME 类型设置为 text/cache-manifest，否则浏览器无法识别。
+    >
+    > ```html
+    > <!DOCTYPE html>
+    > <html manifest="demo.appcache">
+    > <head>
+    >   <title>离线应用</title>
+    > </head>
+    > <body>
+    >   <h1>欢迎</h1>
+    >   <img src="logo.png" alt="标志">
+    > </body>
+    > </html>
+    > ```
+    >
+    > ```shell
+    > # demo.appcache 文件
+    > CACHE MANIFEST
+    > # 版本 1.0
+    > 
+    > CACHE:
+    > index.html
+    > styles.css
+    > script.js
+    > logo.png
+    > 
+    > NETWORK:
+    > /api/*
+    > 
+    > # 网络不可用时，用 offline.html 替代。
+    > FALLBACK:
+    > / offline.html
+    > ```
+    >
+    > 缓存流程
+    >
+    > 浏览器首次加载页面时，下载 manifest 文件并缓存指定资源。离线时，浏览器使用缓存资源渲染页面。当 manifest 文件更新时，浏览器重新缓存资源。
+    >
+    > 优点
+    >
+    > 离线支持、减少请求、简单实现
+    >
+    > 缺点
+    >
+    > 更新困难、不可控性(缓存管理不灵活，无法动态清除或部分更新)、调试复杂（缓存问题难以排查）、性能问题（首次加载需下载所有资源，可能增加初始加载时间）
+    >
+    > 替代方案
+    >
+    > 使用 Service Workers 替代。Service Workers 可以更加细腻的控制缓存，可拦截和缓存特定请求。用 js 控制，支持动态更新。灵活性高，支持复杂逻辑。是现代 web 标准，浏览器广泛支持。
+    >
+    > ```js
+    > // service-worker.js
+    > self.addEventListener('install', (event) => {
+    >   event.waitUntil(
+    >     caches.open('v1').then((cache) => {
+    >       return cache.addAll([
+    >         '/',
+    >         '/styles.css',
+    >         '/script.js',
+    >       ]);
+    >     })
+    >   );
+    > });
+    > 
+    > self.addEventListener('fetch', (event) => {
+    >   event.respondWith(
+    >     caches.match(event.request).then((response) => {
+    >       return response || fetch(event.request);
+    >     })
+    >   );
+    > });
+    > ```
+    >
+    > ```html
+    > <script>
+    >   if ('serviceWorker' in navigator) {
+    >     navigator.serviceWorker.register('/service-worker.js');
+    >   }
+    > </script>
+    > ```
 
 16. 如何在 HTML 中嵌入 SVG？
 
