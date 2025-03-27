@@ -274,7 +274,7 @@
    >
    >    ```javascript
    >    const images = document.querySeletorAll('img[data-src]');
-   >       
+   >          
    >    const observer = new IntersectionObserver((entries, observer) => {
    >      entries.forEach(entry => {
    >        if(entry.isIntersecting){ // 元素进入视口
@@ -285,9 +285,9 @@
    >        }
    >      })
    >    }, { rootMargin: '0px 0px 100px 0px'}); // 提前 100px 加载
-   >       
+   >          
    >    images.forEach(img => observer.observe(img));
-   >       
+   >          
    >    // 该方法不支持老旧浏览器，如 IE。
    >    ```
    >
@@ -530,13 +530,268 @@
 
 16. 如何在 HTML 中嵌入 SVG？
 
+    > [!NOTE]
+    >
+    > SVG（Scalable Vector Graphics，可伸缩矢量图形）是一种基于 XML 的矢量图像格式，广泛用于网页中的图标、图表和动画。
+    >
+    > 使用方式
+    >
+    > 1. 使用 <img> 标签，将 SVG 文件作为外部资源通过 <img> 的 src 属性引入。
+    >
+    >    ```html
+    >    <img src="icon.svg" alt="图标">
+    >    ```
+    >
+    >    具有简单易用，类似普通图片（如 PNG）、支持缓存和复用、加载性能好的优点。但无法通过 CSS 或 JavaScript 直接操作 SVG 内部元素（如修改颜色），不支持动画或交互。
+    >
+    > 2. 使用 <object> 标签嵌入外部 SVG 文件。
+    >
+    >    ```html
+    >    <object type="image/svg+xml" data="chart.svg" width="300" height="200">
+    >      您的浏览器不支持 SVG
+    >    </object>
+    >    ```
+    >
+    >    具有支持独立的 SVG 文档（包括脚本和动画）、可通过 JavaScript 访问 SVG DOM（需跨域允许）、可提供回退内容。但是比较复杂，CSS 样式隔离，难以直接影响内部元素。
+    >
+    > 3. 使用 <iframe> 标签将 SVG 文件嵌入到 <iframe> 中。
+    >
+    >    ```html
+    >    <iframe src="logo.svg" width="100" height="100" frameborder="0"></iframe>
+    >    ```
+    >
+    >    具有完全隔离 SVG 内容，适合复杂的独立文件、支持动画和脚本的优点。但性能开销较大，难以与主页面交互或样式化。
+    >
+    > 4. 内联 SVG（直接写入 <svg> 标签）将 SVG 代码直接写入 HTML。
+    >
+    >    ```html
+    >    <svg width="100" height="100" viewBox="0 0 100 100">
+    >      <circle cx="50" cy="50" r="40" fill="red" />
+    >      <text x="50" y="55" text-anchor="middle" fill="white">SVG</text>
+    >    </svg>
+    >    ```
+    >
+    >    具有可控性强，可直接用 CSS 样式化 SVG 内部的元素（如 fill，stroke）、动态交互，可通过 JS 操作 SVG DOM、无额外请求，减少网络开销。直接签入会增加 HTML 文件的大小，且不便于复用。
+    >
+    >    ```css
+    >    circle {
+    >      fill: blue;
+    >    }
+    >    ```
+    >
+    >    ```js
+    >    document.querySelector('circle').setAttribute('r', '30');
+    >    ```
+    >
+    > 5. 使用 CSS background-image 将 SVG 文件作为背景图引入。具有简单、支持复用和缓存的优点，但是无法操作 SVG 内部元素，不支持动画。
+    >
+    >    ```js
+    >    <div class="icon"></div>
+    >    <style>
+    >      .icon {
+    >        width: 50px;
+    >        height: 50px;
+    >        background-image: url('icon.svg');
+    >        background-size: contain;
+    >      }
+    >    </style>
+    >    ```
+    >
+    > 6. 使用 <use> 引用 SVG 片段，将 SVG 定义在 <defs> 中，通过 <use> 复用。
+    >
+    >    ```html
+    >    <svg style="display: none;">
+    >      <defs>
+    >        <symbol id="star" viewBox="0 0 100 100">
+    >          <polygon points="50,0 61,35 98,35 68,57 79,91 50,70 21,91 32,57 2,35 39,35" fill="yellow"/>
+    >        </symbol>
+    >      </defs>
+    >    </svg>
+    >    <svg width="50" height="50">
+    >      <use href="#star" />
+    >    </svg>
+    >    <svg width="30" height="30">
+    >      <use href="#star" />
+    >    </svg>
+    >    ```
+    >
+    >    具有复用性强，一个定义多处使用、可通过 CSS 和 JS 控制的优点，但是需内联定义，增加代码量，外部 SVG 文件需通过其他方式引入。
+    >
+    >    性能优化
+    >
+    >    1. 内联 SVG 或 <use> 避免额外 HTTP 请求
+    >
+    >    2. 使用工具（如 SVGO）优化 SVG 文件大小
+    >
+    >    3. 对外部 SVG（如 <img>）使用 loading="lazy"
+    >
+    >    4. 内联 SVG 可通过 viewBox 自适应，
+    >
+    >       ```html
+    >       <svg viewBox="0 0 100 100" width="100%">
+    >         <rect x="10" y="10" width="80" height="80" fill="green"/>
+    >       </svg>
+    >       ```
+
 17. HTML 中的 hidden 属性有什么用？
+
+    > [!NOTE]
+    >
+    > hidden 属性是 HTML5 引入的一个全局属性（Global Attribute），可以应用到任何 HTML 元素上。它的作用是**隐藏元素**，使元素在页面上不可见，同时从布局中移除，类似于 CSS 的 display: none。
+    >
+    > 当元素设置 hidden 属性时，浏览器不会渲染该元素，用户无法看到或交互。hidden 是一个布尔属性，存在即生效（hidden 或 hidden=""），不存在或设为 hidden="false" 表示不隐藏。
+    >
+    > 主要作用
+    >
+    > 1. 控制元素可见性，快速隐藏元素，无需编写额外的 CSS。
+    > 2. 语义化标记，通过 HTML 属性明确表示元素应隐藏，具有语义化意义。
+    > 3. 动态显示/隐藏，结合 JavaScript 动态切换元素的可见性。可访问性支持，隐藏的元素会被屏幕阅读器忽略，提升无障碍体验。
+    >
+    > 应用场景
+    >
+    > 1. 用于页面加载时默认隐藏的元素
+    > 2. 在前端框架中结合逻辑控制条件显示
+    > 3. 表单提示中隐藏错误信息，动态显示
+    > 4. 用于逐步加载，隐藏未就绪的内容，加载完成后再显示
+    >
+    > hidden 是 HTML5 属性，现代浏览器广泛支持，老旧浏览器（如 IE9 以下）需 polyfill 或用 display: none 替代。hidden 自动映射到 aria-hidden="true"，但显式设置 aria-hidden="false" 会覆盖。
+    >
+    > 以下是以表格形式列出的 `hidden` 属性、`display: none` 和 `visibility: hidden` 的详细对比，清晰简洁，适合前端面试场景展示。
+    >
+    > | **特性**     | **`hidden`**                    | **`display: none`**                      | **`visibility: hidden`**                        |
+    > | ------------ | ------------------------------- | ---------------------------------------- | ----------------------------------------------- |
+    > | **定义**     | HTML5 全局属性                  | CSS 属性                                 | CSS 属性                                        |
+    > | **用法示例** | `<div hidden>内容</div>`        | `<div style="display: none;">内容</div>` | `<div style="visibility: hidden;">内容</div>`   |
+    > | **隐藏效果** | 完全隐藏，不渲染                | 完全隐藏，不渲染                         | 隐藏但保留布局                                  |
+    > | **占用空间** | 否                              | 否                                       | 是                                              |
+    > | **默认行为** | 等同 `display: none`            | 移除元素渲染                             | 元素不可见但保留空间                            |
+    > | **语义性**   | 有（表示“应隐藏”）              | 无（纯样式）                             | 无（纯样式）                                    |
+    > | **优先级**   | 可被 CSS `display` 覆盖         | 覆盖 `hidden`                            | 与 `display` 无冲突                             |
+    > | **可访问性** | 映射 `aria-hidden="true"`，忽略 | 屏幕阅读器忽略                           | 可能被读取，需 `aria-hidden`                    |
+    > | **JS 操作**  | `element.hidden = true/false`   | `element.style.display = 'none'/'block'` | `element.style.visibility = 'hidden'/'visible'` |
+    > | **性能影响** | 不渲染，节省资源                | 不渲染，节省资源                         | 参与布局，略高开销                              |
+    > | **继承性**   | 不继承，子元素默认可见          | 子元素随父移除                           | 可继承，子元素可覆盖                            |
+    > | **动画支持** | 否（直接移除）                  | 否（直接移除）                           | 是（支持过渡效果）                              |
+    > | **使用场景** | 语义化隐藏、动态切换            | 条件渲染、完全移除                       | 占位隐藏、动画效果                              |
+    >
+    > ---
+    >
+    > 示例代码
+    >
+    > ```html
+    > <div hidden>hidden 隐藏</div>
+    > <div style="display: none;">display: none 隐藏</div>
+    > <div style="visibility: hidden;">visibility: hidden 隐藏</div>
+    > <div>可见内容</div>
+    > ```
+    > - **效果**：
+    >   - `hidden` 和 `display: none`：不显示，不占空间。
+    >   - `visibility: hidden`：不显示，但留空白。
+    >
+    > ---
+    >
+    > 总结
+    >
+    > - **`hidden`**：语义化，简单切换，类似 `display: none`。
+    > - **`display: none`**：完全移除，性能优，适合条件渲染。
+    > - **`visibility: hidden`**：占位隐藏，支持动画，适合保留布局。
 
 18. 什么是 HTML 的 preload 和 prefetch？
 
+    > [!NOTE]
+    >
+    > preload 和 prefetch 是 HTML 中用于优化资源加载的机制，通常通过 <link> 标签实现。它们帮助浏览器提前加载关键资源或预测用户可能需要的资源，从而提升页面性能和用户体验。
+    >
+    > preload（预加载）是一种资源预加载指令，告诉浏览器**尽快加载当前页面必需的关键资源**，以便在需要时立即可用，通过 <link rel="preload"> 定义。主要用于提前加载对页面渲染或功能至关重要的资源（如 CSS、JS、字体、图片等），减少等待时间，它不会阻塞页面渲染，而是并行加载。一个完整的 preload 指令需要三个属性，rel = preload、as = style | script | image | font、href = 资源地址。可用于提升首屏渲染速度，确保关键资源优先级高于非关键资源。需要正确设置 as 属性，否则可能被忽略，避免重复预加载浪费带宽。
+    >
+    > prefetch（预取）是一种资源预取指令，告诉浏览器在空闲时加载**用户未来可能需要的资源**，通常用于下一页或后续导航，通过 <link rel="prefetch"> 定义。主要作用是在当前页面加载完成后，利用空闲带宽提前加载预测资源，优化后续页面访问速度。它不保证立即加载，优先级低于 preload。不需要 as 属性。可用于优化导航体验，减少跳转等待时间，利用空闲资源，不影响当前页面，它的优先级低，可能不会执行（视网络和浏览器策略）。
+    >
+    > preload 可用于提前加载字体，从而解决字体闪烁（FOUT），可用于提前加载关键资源，提升 LCP（Largest Contentful Paint）。
+    >
+    > prefetch 可以在空闲时加载非关键资源，优化 TTI（Time to Interactive），可以结合用户行为预测，如鼠标悬停的时候手动插入一个需要 prefetch 的资源。
+
 19. HTML 中的 form 标签有哪些新特性？
 
+    > [!NOTE]
+    >
+    > HTML5 为 <form> 标签及其相关元素引入了许多新特性和属性，增强了表单的功能性、可访问性和用户体验。这些新特性减少了对 JavaScript 的依赖，使表单验证、输入类型和交互更加原生化。
+    >
+    > HTML5 扩展了 <input> 元素的 type 属性，提供了更多语义化和功能化的输入类型，支持原生验证和键盘适配。如 email、url、tel、number、range、date、time、datetime-local、month、week、color、search。
+    >
+    > HTML5 为 <form> 和表单元素引入了新的属性，增强了控制和验证能力。如 autocomplete、novalidate、form、required、pattern、placeholder、autofocus、multiple、min、max、step、formaction、formenctype、formmethod、formtarget。
+    >
+    > HTML5 引入了新的表单相关标签，扩展了功能。如 datalist（为 <input> 提供自动补全选项列表）、output（显示计算或表单处理结果）、progress（显示任务进度条）、meter（显示范围内的测量值（如百分比））。
+    >
+    > 表单验证增强。required、pattern 等属性触发浏览器内置验证，可使用 setCustomValidity() API 自定义提示。
+    >
+    > ```html
+    > <input type="text" id="input" pattern="[0-9]+" oninput="validate(this)">
+    > <script>
+    >   function validate(input) {
+    >     input.setCustomValidity(input.value.match(/[0-9]+/) ? '' : '请输入数字');
+    >   }
+    > </script>
+    > ```
+
 20. 如何实现一个可访问性（Accessibility）友好的页面？
+
+    > [!NOTE]
+    >
+    > 实现一个可访问性（Accessibility，简称 A11y）友好的页面，意味着确保所有用户（包括残障人士，如视障、听障、运动障碍用户）都能有效地访问和使用网页内容。这需要遵循 Web 无障碍标准。
+    >
+    > 1. 使用正确的语义标签提供结构和含义，便于屏幕阅读器理解页面。避免滥用 <div>，为内容赋予语义。
+    > 2. 确保所有交互元素（如链接、按钮、表单）可通过键盘访问，服务无法使用鼠标的用户。确保元素可聚焦（默认或通过 tabindex）。避免破坏默认焦点顺序。添加键盘事件（如 Enter 或 Space 触发按钮）。
+    > 3. 使用 ARIA 角色（role）和属性（如 aria-label、aria-hidden）。增强动态内容和复杂组件的可访问性，补充 HTML 语义。
+    > 4. 为非文本内容提供替代描述。为 <img> 添加 alt 属性。使用 track 标签为视频/音频添加字幕或描述。
+    > 5. 确保表单易于填写和理解。使用 <label> 关联输入、添加错误提示、使用 autocomplete 和 placeholder 辅助。
+    > 6. 确保视觉内容对色盲或低视力用户友好，满足 WCAG 对比度要求（文本对比度至少 4.5:1），避免仅靠颜色传达信息。
+    > 7. 使用相对单位（如 rem、em）适配不同设备和视力需求。避免固定高度，确保内容可缩放，支持浏览器缩放。
+    > 8. 确保动态更新对所有用户可见，使用 aria-live 通知变化。
+    > 9. 验证页面是否符合无障碍标准。在 Chrome DevTools 中运行 Lighthouse，检查 Accessibility 分数。
+    >
+    > ```html
+    > <!DOCTYPE html>
+    > <html lang="zh">
+    > <head>
+    >   <meta charset="UTF-8">
+    >   <title>无障碍页面</title>
+    >   <style>
+    >     :focus { outline: 2px solid #0078d4; }
+    >     .error { color: #d32f2f; }
+    >     body { font-size: 1rem; color: #333; background: #fff; }
+    >   </style>
+    > </head>
+    > <body>
+    >   <header>
+    >     <h1>欢迎</h1>
+    >     <nav aria-label="主导航">
+    >       <ul>
+    >         <li><a href="#home">首页</a></li>
+    >         <li><a href="#contact">联系</a></li>
+    >       </ul>
+    >     </nav>
+    >   </header>
+    >   <main>
+    >     <form>
+    >       <label for="email">邮箱：</label>
+    >       <input id="email" type="email" required autocomplete="email" placeholder="请输入邮箱">
+    >       <span id="email-error" role="alert" hidden>邮箱格式错误</span>
+    >       <button type="submit">提交</button>
+    >     </form>
+    >     <img src="banner.jpg" alt="网站横幅，展示风景">
+    >   </main>
+    >   <script>
+    >     document.querySelector('form').addEventListener('submit', (e) => {
+    >       e.preventDefault();
+    >       const email = document.getElementById('email');
+    >       if (!email.checkValidity()) {
+    >         document.getElementById('email-error').hidden = false;
+    >       }
+    >     });
+    >   </script>
+    > </body>
+    > </html>
+    > ```
 
     ## css
 
