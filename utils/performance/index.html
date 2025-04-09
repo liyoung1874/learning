@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>性能监控示例</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+  <h1>前端性能监控工具</h1>
+  
+  <button id="showReport">显示性能报告</button>
+  <div id="performanceReport"></div>
+  
+  <script src="./performance-monitor.js"></script>
+  <script src="./performance-visualizer.js"></script>
+  <script>
+    // 初始化性能监控
+    const monitor = new PerformanceMonitor({
+      sampleRate: 100,
+      reportUrl: 'https://your-backend-api.com/metrics',
+      autoSend: false,
+      includeResources: true,
+      includeLongTasks: true,
+      includeLayoutShifts: true
+    });
+
+    console.log('Performance Monitor initialized:', monitor);
+    
+    // 自定义计时点
+    monitor.mark('pageInit');
+    
+    window.addEventListener('load', () => {
+      monitor.mark('pageLoaded');
+      monitor.measure('totalPageLoad', 'pageInit', 'pageLoaded');
+    });
+    
+    // 显示性能报告
+    document.getElementById('showReport').addEventListener('click', () => {
+      const metrics = monitor.getAllMetrics();
+      const visualizer = new PerformanceVisualizer(metrics, 'performanceReport');
+      visualizer.render();
+    });
+  </script>
+</body>
+</html>

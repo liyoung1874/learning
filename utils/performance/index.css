@@ -1,0 +1,58 @@
+.perf-header {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.perf-header h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.perf-metrics-table,
+.perf-other-metrics,
+.perf-resources,
+.perf-fps-chart,
+.perf-long-tasks {
+  margin-bottom: 25px;
+  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.good {
+  color: #2ecc71;
+}
+
+.needs-improvement {
+  color: #f39c12;
+}
+
+.poor {
+  color: #e74c3c;
+}
+
+.neutral {
+  color: #7f8c8d;
+}
