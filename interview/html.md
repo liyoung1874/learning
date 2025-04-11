@@ -1206,7 +1206,7 @@ SVG 方案更精确，通过 `stroke-dasharray` 设置圆周长度，`stroke-das
 媒体查询是响应式设计的核心，支持 `min-width`、`max-width` 等条件。常用于适配手机、平板、桌面等设备，也可检测打印或暗模式。
 
 **示例代码**：
-```css
+``` css
 .box {
   width: 100%;
 }
