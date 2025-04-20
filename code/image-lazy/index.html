@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMAGE LAZY LOADING</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .placeholder {
+            width: 100vw;
+            height: 100vh;
+            margin-bottom: 20px;
+            background-color: #ccc;
+        }
+        img {
+            min-height: 200px;
+            min-width: 300px;
+            width: 100%;
+            overflow: hidden;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="placeholder"></div>
+    <div>
+        <img src="" alt="" data-src="https://picsum.photos/1300/1200" />
+        <img src="" alt="" data-src="https://picsum.photos/1300/1200" />
+        <img src="" alt="" data-src="https://picsum.photos/1300/1200" />
+        <img src="" alt="" data-src="https://picsum.photos/1300/1200" />
+        <img src="" alt="" data-src="https://picsum.photos/1300/1200" />
+        <img src="" alt="" data-src="https://picsum.photos/1300/1200" />
+        <img src="" alt="" data-src="https://picsum.photos/1300/1200" />
+        <img src="" alt="" data-src="https://picsum.photos/1300/1200" />
+        <img src="" alt="" data-src="https://picsum.photos/1300/1200" />
+        <img src="" alt="" data-src="https://picsum.photos/1300/1200" />
+        <img src="" alt="" data-src="https://picsum.photos/1300/1200" />
+        <img src="" alt="" data-src="https://picsum.photos/1300/1200" />
+    </div>
+
+    <script>
+        // 获取所有的 img 元素
+        const images = document.querySelectorAll('img[data-src]');
+        console.log('images.length', images.length)
+
+        // 判断元素是否在视口内
+        function isInViewPort(ele){
+            const rect = ele.getBoundingClientRect();
+            return rect.top >= 0 && rect.top < (window.innerHeight || document.documentElement.clientHeight);
+        }
+
+        // 设置 img 的 src
+        function loadImage(img) {
+            if(img.dataset.src){
+                console.log('set src of img tag')
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src'); // 移除 data-src 避免重复设置
+            }
+        }
+
+        // 监听事件
+        function checkImage(){
+            console.log('checkImage');
+            images.forEach(img => {
+                if(isInViewPort(img)){
+                    loadImage(img);
+                }
+            })
+        }
+
+        // 监听滚动事件
+        window.addEventListener('scroll', throttle(checkImage, 300));
+        window.addEventListener('resize', throttle(checkImage, 300));
+
+        // 初始化检查
+        checkImage();
+
+        // 使用节流优化
+        function throttle(fn, delay = 150){
+            let timer = null;
+            return function(){
+                if(timer) return;
+                timer = setTimeout(() => {
+                    fn();
+                    clearTimeout(timer);
+                    timer = null;
+                },delay);
+            }
+        }
+    </script>
+</body>
+</html>
